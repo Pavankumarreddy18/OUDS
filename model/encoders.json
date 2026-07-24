@@ -1,0 +1,268 @@
+{
+  "gender": {
+    "classes": [
+      "Female",
+      "Male",
+      "Other"
+    ],
+    "mapping": {
+      "Female": 0,
+      "Male": 1,
+      "Other": 2
+    }
+  },
+  "tobaccoUse": {
+    "classes": [
+      "Daily",
+      "Never",
+      "Occasionally",
+      "Quit recently"
+    ],
+    "mapping": {
+      "Daily": 0,
+      "Never": 1,
+      "Occasionally": 2,
+      "Quit recently": 3
+    }
+  },
+  "alcoholUse": {
+    "classes": [
+      "Daily",
+      "Never",
+      "Occasionally",
+      "Weekly"
+    ],
+    "mapping": {
+      "Daily": 0,
+      "Never": 1,
+      "Occasionally": 2,
+      "Weekly": 3
+    }
+  },
+  "betelNutUse": {
+    "classes": [
+      "Daily",
+      "Multiple times a day",
+      "Never",
+      "Occasionally"
+    ],
+    "mapping": {
+      "Daily": 0,
+      "Multiple times a day": 1,
+      "Never": 2,
+      "Occasionally": 3
+    }
+  },
+  "currentMedications": {
+    "classes": [
+      "NSAIDs",
+      "antibiotics",
+      "anticonvulsants",
+      "bisphosphonates",
+      "chemotherapy",
+      "immunosuppressants",
+      "methotrexate",
+      "nan",
+      "steroids"
+    ],
+    "mapping": {
+      "NSAIDs": 0,
+      "antibiotics": 1,
+      "anticonvulsants": 2,
+      "bisphosphonates": 3,
+      "chemotherapy": 4,
+      "immunosuppressants": 5,
+      "methotrexate": 6,
+      "nan": 7,
+      "steroids": 8
+    }
+  },
+  "duration": {
+    "classes": [
+      "1-2 weeks",
+      "1-3 days",
+      "1-3 months",
+      "2-4 weeks",
+      "4-7 days",
+      ">3 months"
+    ],
+    "mapping": {
+      "1-2 weeks": 0,
+      "1-3 days": 1,
+      "1-3 months": 2,
+      "2-4 weeks": 3,
+      "4-7 days": 4,
+      ">3 months": 5
+    }
+  },
+  "firstTimeOrRecurring": {
+    "classes": [
+      "First time",
+      "Recurring"
+    ],
+    "mapping": {
+      "First time": 0,
+      "Recurring": 1
+    }
+  },
+  "numberOfSores": {
+    "classes": [
+      "1",
+      "2-3",
+      "4-5",
+      "More than 5"
+    ],
+    "mapping": {
+      "1": 0,
+      "2-3": 1,
+      "4-5": 2,
+      "More than 5": 3
+    }
+  },
+  "size": {
+    "classes": [
+      "10-20mm",
+      "5-10mm",
+      "<5mm",
+      ">20mm"
+    ],
+    "mapping": {
+      "10-20mm": 0,
+      "5-10mm": 1,
+      "<5mm": 2,
+      ">20mm": 3
+    }
+  },
+  "shape": {
+    "classes": [
+      "Crater-like",
+      "Irregular",
+      "Oval",
+      "Round"
+    ],
+    "mapping": {
+      "Crater-like": 0,
+      "Irregular": 1,
+      "Oval": 2,
+      "Round": 3
+    }
+  },
+  "color": {
+    "classes": [
+      "Mixed red and white",
+      "Red",
+      "White",
+      "White with red border",
+      "White/Grey",
+      "Yellow"
+    ],
+    "mapping": {
+      "Mixed red and white": 0,
+      "Red": 1,
+      "White": 2,
+      "White with red border": 3,
+      "White/Grey": 4,
+      "Yellow": 5
+    }
+  },
+  "border": {
+    "classes": [
+      "Irregular",
+      "Raised",
+      "Rolled/Hard",
+      "Smooth"
+    ],
+    "mapping": {
+      "Irregular": 0,
+      "Raised": 1,
+      "Rolled/Hard": 2,
+      "Smooth": 3
+    }
+  },
+  "soreLocation": {
+    "classes": [
+      "Floor of mouth",
+      "Gums",
+      "Hard palate",
+      "Inside cheek",
+      "Lower lip",
+      "Multiple sites",
+      "Soft palate",
+      "Tongue (side)",
+      "Tongue (top)",
+      "Upper lip"
+    ],
+    "mapping": {
+      "Floor of mouth": 0,
+      "Gums": 1,
+      "Hard palate": 2,
+      "Inside cheek": 3,
+      "Lower lip": 4,
+      "Multiple sites": 5,
+      "Soft palate": 6,
+      "Tongue (side)": 7,
+      "Tongue (top)": 8,
+      "Upper lip": 9
+    }
+  },
+  "diagnosis": {
+    "classes": [
+      "Aphthous Major",
+      "Aphthous Minor",
+      "Behcet's Disease",
+      "Candidal Stomatitis",
+      "Drug-induced Ulcer",
+      "Erythroplakia",
+      "Herpetic (HSV-1)",
+      "Herpetiform Aphthous",
+      "Leukoplakia",
+      "Nutritional Deficiency Ulcer",
+      "Oral Lichen Planus",
+      "Squamous Cell Carcinoma",
+      "Traumatic Ulcer"
+    ],
+    "mapping": {
+      "Aphthous Major": 0,
+      "Aphthous Minor": 1,
+      "Behcet's Disease": 2,
+      "Candidal Stomatitis": 3,
+      "Drug-induced Ulcer": 4,
+      "Erythroplakia": 5,
+      "Herpetic (HSV-1)": 6,
+      "Herpetiform Aphthous": 7,
+      "Leukoplakia": 8,
+      "Nutritional Deficiency Ulcer": 9,
+      "Oral Lichen Planus": 10,
+      "Squamous Cell Carcinoma": 11,
+      "Traumatic Ulcer": 12
+    }
+  },
+  "risk_level": {
+    "classes": [
+      "CRITICAL",
+      "HIGH",
+      "LOW",
+      "MODERATE"
+    ],
+    "mapping": {
+      "CRITICAL": 0,
+      "HIGH": 1,
+      "LOW": 2,
+      "MODERATE": 3
+    }
+  },
+  "urgency": {
+    "classes": [
+      "EMERGENCY",
+      "ROUTINE",
+      "SOON",
+      "URGENT"
+    ],
+    "mapping": {
+      "EMERGENCY": 0,
+      "ROUTINE": 1,
+      "SOON": 2,
+      "URGENT": 3
+    }
+  }
+}

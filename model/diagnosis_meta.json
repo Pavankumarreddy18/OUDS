@@ -1,0 +1,54 @@
+{
+  "Aphthous Minor": {
+    "risk_level": "LOW",
+    "urgency": "ROUTINE"
+  },
+  "Traumatic Ulcer": {
+    "risk_level": "LOW",
+    "urgency": "ROUTINE"
+  },
+  "Candidal Stomatitis": {
+    "risk_level": "LOW",
+    "urgency": "SOON"
+  },
+  "Erythroplakia": {
+    "risk_level": "CRITICAL",
+    "urgency": "URGENT"
+  },
+  "Leukoplakia": {
+    "risk_level": "HIGH",
+    "urgency": "URGENT"
+  },
+  "Squamous Cell Carcinoma": {
+    "risk_level": "CRITICAL",
+    "urgency": "EMERGENCY"
+  },
+  "Drug-induced Ulcer": {
+    "risk_level": "MODERATE",
+    "urgency": "SOON"
+  },
+  "Aphthous Major": {
+    "risk_level": "MODERATE",
+    "urgency": "SOON"
+  },
+  "Herpetiform Aphthous": {
+    "risk_level": "LOW",
+    "urgency": "SOON"
+  },
+  "Behcet's Disease": {
+    "risk_level": "HIGH",
+    "urgency": "URGENT"
+  },
+  "Herpetic (HSV-1)": {
+    "risk_level": "MODERATE",
+    "urgency": "SOON"
+  },
+  "Nutritional Deficiency Ulcer": {
+    "risk_level": "LOW",
+    "urgency": "SOON"
+  },
+  "Oral Lichen Planus": {
+    "risk_level": "MODERATE",
+    "urgency": "SOON"
+  }
+}
