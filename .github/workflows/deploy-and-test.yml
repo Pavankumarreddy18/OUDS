@@ -1,0 +1,84 @@
+name: Web E2E Tests & GH Pages Deployment
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Frontend Dependencies
+        working-directory: ./client
+        run: npm ci || npm install
+
+      - name: Build Frontend
+        working-directory: ./client
+        run: npx vite build --base /OUDS-project/
+
+      - name: Start Background Vite Preview Server
+        working-directory: ./client
+        run: |
+          npx vite preview --port 5173 --host 127.0.0.1 --base /OUDS-project/ &
+          sleep 4
+          curl --retry 5 --retry-connrefused http://127.0.0.1:5173/OUDS-project/
+          echo "TEST_BASE_URL=http://127.0.0.1:5173/OUDS-project/" >> $GITHUB_ENV
+
+      - name: Install E2E Dependencies
+        working-directory: ./OUDSE2E
+        run: npm ci || npm install
+
+      - name: Run Mega 1100-Assertion Test Suite
+        working-directory: ./OUDSE2E
+        run: npm test
+
+      - name: Merge HTML Report into Frontend Dist
+        if: always()
+        run: |
+          mkdir -p client/dist/reports/latest
+          mkdir -p client/dist/reports/history/build-${{ github.run_number }}
+          cp OUDSE2E/Test_Results/HTML/execution-report.html client/dist/reports/latest/execution-report.html
+          cp OUDSE2E/Test_Results/HTML/execution-report.html client/dist/reports/history/build-${{ github.run_number }}/execution-report.html
+
+      - name: Setup Pages
+        if: always()
+        uses: actions/configure-pages@v4
+
+      - name: Upload Artifact for Deployment
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './client/dist'
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Summarize Execution
+        if: always()
+        run: |
+          echo "## 🚀 E2E Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "The massive 1,100-assertion suite has completed execution against the Vite preview server." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Live Report Links:" >> $GITHUB_STEP_SUMMARY
+          echo "- **[Latest Execution Report](https://${{ github.repository_owner }}.github.io/OUDS-project/reports/latest/execution-report.html)**" >> $GITHUB_STEP_SUMMARY
+          echo "- **[Historical Report for Build #${{ github.run_number }}](https://${{ github.repository_owner }}.github.io/OUDS-project/reports/history/build-${{ github.run_number }}/execution-report.html)**" >> $GITHUB_STEP_SUMMARY

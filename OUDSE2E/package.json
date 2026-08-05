@@ -1,0 +1,19 @@
+{
+  "name": "oudse2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/*.test.js --reporter utils/excelReporter.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "chromedriver": "^151.0.3",
+    "exceljs": "^4.4.0",
+    "mocha": "^11.8.0",
+    "selenium-webdriver": "^4.46.0"
+  }
+}
