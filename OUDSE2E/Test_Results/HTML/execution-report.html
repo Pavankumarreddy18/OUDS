@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mega Web E2E Test Execution Report</title>
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #121212; color: #e0e0e0; margin: 0; padding: 20px; }
+    h1 { color: #ffffff; text-align: center; }
+    .summary { display: flex; justify-content: space-around; margin: 30px 0; padding: 20px; background: #1e1e1e; border-radius: 8px; }
+    .badge { padding: 10px 20px; border-radius: 20px; font-weight: bold; font-size: 1.2em; }
+    .pass { background: #28a745; color: white; }
+    .fail { background: #dc3545; color: white; }
+    .total { background: #007bff; color: white; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #333; padding: 12px; text-align: left; }
+    th { background-color: #252525; color: #fff; }
+    tr:nth-child(even) { background-color: #1a1a1a; }
+    tr:hover { background-color: #2a2a2a; }
+    .status-pass { color: #4caf50; font-weight: bold; }
+    .status-fail { color: #f44336; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Mega Web E2E Test Execution Report</h1>
+  <div class="summary">
+    <div class="badge total">Total Tests: 1</div>
+    <div class="badge pass">Passes: 0</div>
+    <div class="badge fail">Failures: 1</div>
+    <div class="badge fail">Pass Rate: 0%</div>
+  </div>
+  
+  <h2>Detailed Results</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Test Case</th>
+        <th>Duration (ms)</th>
+        <th>Status</th>
+        <th>Error</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr>
+          <td>MEGA Web E2E Test Suite (1,100 Assertions)</td>
+          <td>"before all" hook in "MEGA Web E2E Test Suite (1,100 Assertions)"</td>
+          <td>248528</td>
+          <td class="status-fail">Fail</td>
+          <td>Timeout of 30000ms exceeded. For async tests and hooks, ensure "done()" is called; if returning a Promise, ensure it resolves. (C:\FullStack\OUDSE2E\tests\mega_web_1100.test.js)</td>
+        </tr>
+      
+    </tbody>
+  </table>
+</body>
+</html>
+  

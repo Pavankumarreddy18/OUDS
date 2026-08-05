@@ -76,9 +76,6 @@ jobs:
       - name: Summarize Execution
         if: always()
         run: |
-          echo "## 🚀 E2E Test Execution Summary" >> $GITHUB_STEP_SUMMARY
-          echo "The massive 1,100-assertion suite has completed execution against the Vite preview server." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📊 Live Report Links:" >> $GITHUB_STEP_SUMMARY
           echo "- **[Latest Execution Report](https://${{ github.repository_owner }}.github.io/OUDS-project/reports/latest/execution-report.html)**" >> $GITHUB_STEP_SUMMARY
           echo "- **[Historical Report for Build #${{ github.run_number }}](https://${{ github.repository_owner }}.github.io/OUDS-project/reports/history/build-${{ github.run_number }}/execution-report.html)**" >> $GITHUB_STEP_SUMMARY

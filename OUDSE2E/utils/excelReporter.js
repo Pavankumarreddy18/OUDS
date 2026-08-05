@@ -41,6 +41,34 @@ class ExcelReporter extends mocha.reporters.Base {
       } catch (err) {
         console.error("Failed to generate HTML report:", err);
       }
+      
+      // Write to GITHUB_STEP_SUMMARY if running in GitHub Actions
+      if (process.env.GITHUB_STEP_SUMMARY) {
+        try {
+          const runNumber = process.env.GITHUB_RUN_NUMBER || 'Local';
+          let totalDurationMs = 0;
+          Object.values(stats.categoryStats).forEach(cat => totalDurationMs += cat.duration);
+          const totalDurationSec = (totalDurationMs / 1000).toFixed(2);
+          const totalTests = stats.passes + stats.failures;
+          const passRate = totalTests > 0 ? ((stats.passes / totalTests) * 100).toFixed(2) : '0.00';
+          const statusIcon = stats.failures === 0 ? '🏆' : '❌';
+          const failIcon = stats.failures === 0 ? '➖' : '❌';
+
+          let summaryMd = `## 📊 E2E Web Test Execution Summary (Build #${runNumber})\n\n`;
+          summaryMd += `| Metric | Value | Status |\n`;
+          summaryMd += `| :--- | :---: | :---: |\n`;
+          summaryMd += `| **Total Tests** | ${totalTests} | 📝 |\n`;
+          summaryMd += `| **Passed** | ${stats.passes} | ✅ |\n`;
+          summaryMd += `| **Failed** | ${stats.failures} | ${failIcon} |\n`;
+          summaryMd += `| **Pass Rate** | ${passRate}% | ${statusIcon} |\n`;
+          summaryMd += `| **Duration** | ${totalDurationSec}s | ⏱️ |\n\n`;
+
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, summaryMd);
+          console.log("Appended markdown table to GITHUB_STEP_SUMMARY.");
+        } catch(e) {
+          console.error("Failed to write to GITHUB_STEP_SUMMARY", e);
+        }
+      }
     });
   }
 
