@@ -10,6 +10,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import PatientRecord from "../models/PatientRecord.js";
 import verifyToken from "../middleware/authMiddleware.js";
 import { generateReport } from "../templates/report_templates.js";
+import nodemailer from "nodemailer";
 
 const router = express.Router();
 
@@ -50,6 +51,7 @@ const predictWithLocalModel = (patientData) => {
     const child = execFile("python", [PREDICT_SCRIPT], {
       timeout: 15000,
       maxBuffer: 1024 * 1024,
+      shell: true,
     }, (error, stdout, stderr) => {
       if (error) {
         console.error("Model prediction error:", error.message);
@@ -321,6 +323,47 @@ router.delete("/records/:id", verifyToken, async (req, res) => {
     res.json({ success: true, msg: "Record deleted successfully" });
   } catch (error) {
     console.error("Delete error:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.post("/email-report", verifyToken, async (req, res) => {
+  try {
+    const { recordId, targetEmail } = req.body;
+    if (!recordId || !targetEmail) return res.status(400).json({ success: false, error: "Missing required fields" });
+
+    const filter = req.user.isAdmin ? { _id: recordId } : { _id: recordId, user: req.user.id };
+    const record = await PatientRecord.findOne(filter);
+    
+    if (!record) return res.status(404).json({ success: false, error: "Record not found" });
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+    });
+
+    const htmlContent = `
+      <h2>Oral Ulcer Diagnosis Report</h2>
+      <p><strong>Patient Name:</strong> ${record.patientName}</p>
+      <p><strong>Date:</strong> ${new Date(record.createdAt).toLocaleDateString()}</p>
+      <p><strong>Diagnosis:</strong> ${record.diagnosis}</p>
+      <p><strong>Risk Level:</strong> ${record.riskLevel}</p>
+      <p><strong>Urgency:</strong> ${record.urgency}</p>
+      <hr />
+      <h3>Detailed AI Report</h3>
+      <pre style="white-space: pre-wrap; font-family: sans-serif;">${record.aiResponse}</pre>
+    `;
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: targetEmail,
+      subject: `OUDS Report for ${record.patientName}`,
+      html: htmlContent,
+    });
+
+    res.json({ success: true, msg: "Report emailed successfully!" });
+  } catch (error) {
+    console.error("Email report error:", error);
     res.status(500).json({ success: false, error: error.message });
   }
 });

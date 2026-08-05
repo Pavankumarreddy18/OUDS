@@ -1,5 +1,13 @@
 {
   "appId": "com.ouds.app",
   "appName": "Ulcer Diagnosis",
-  "webDir": "dist"
+  "webDir": "dist",
+  "server": {
+    "cleartext": true
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
 }

@@ -18,10 +18,12 @@ Format:
 
 Consider: Aphthous (Minor/Major/Herpetiform), Traumatic, Herpetic, Candidal, Lichen Planus, Leukoplakia, Erythroplakia, SCC, Behcet's, Nutritional Deficiency, Drug-induced. Use plain English. Complete ALL sections.`;
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_URL || "https://auckland-crest-reservations-chair.trycloudflare.com";
 
 const api = async (url, method = "GET", body = null, token = null) => {
-  const headers = { "Content-Type": "application/json" };
+  const headers = { 
+    "Content-Type": "application/json"
+  };
   if (token) headers["Authorization"] = `Bearer ${token}`;
   const finalUrl = url.startsWith("http") ? url : `${API_BASE}${url}`;
   const res = await fetch(finalUrl, { method, headers, body: body ? JSON.stringify(body) : null });
@@ -178,9 +180,9 @@ function AuthScreen({ onLogin }) {
       setLoading(true); setError("");
       try {
         const data = await api("/api/auth/forgot-password", "POST", { email });
-        if (data.needOtp) { setOtpStep(true); } 
+        if (data.needOtp) { setOtpStep(true); }
         else { setError(data.msg || "Error"); }
-      } catch(err) { setError(err.message || "Failed to send reset email"); }
+      } catch (err) { setError(err.message || "Failed to send reset email"); }
       setLoading(false);
       return;
     }
@@ -264,10 +266,10 @@ function AuthScreen({ onLogin }) {
           {otpStep
             ? `OTP sent to ${email}`
             : isForgot
-            ? "Enter your email to receive a reset code"
-            : isRegister
-            ? "Register with email verification"
-            : "Sign in to continue"}
+              ? "Enter your email to receive a reset code"
+              : isRegister
+                ? "Register with email verification"
+                : "Sign in to continue"}
         </p>
       </div>
 
@@ -328,11 +330,11 @@ function AuthScreen({ onLogin }) {
             )}
 
             <p className="auth-switch">
-              {isForgot 
-                ? "Remember your password?" 
-                : isRegister 
-                ? "Already have an account?" 
-                : "Don't have an account?"}
+              {isForgot
+                ? "Remember your password?"
+                : isRegister
+                  ? "Already have an account?"
+                  : "Don't have an account?"}
               <span
                 onClick={() => {
                   if (isForgot) setIsForgot(false);
@@ -783,11 +785,25 @@ function FormattedAIReport({ text }) {
 }
 
 // ─── Result Screen ────────────────────────────────────────────────────────────
-function ResultScreen({ result, patientName, imageUrl, onBack, onDashboard }) {
+function ResultScreen({ recordId, result, patientName, imageUrl, onBack, onDashboard }) {
   const meta = extractMeta(result);
   const [chat, setChat] = useState([{ role: "ai", content: "Analysis complete! Feel free to ask any follow-up questions." }]);
   const [chatInput, setChatInput] = useState("");
   const [chatLoading, setChatLoading] = useState(false);
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [doctorEmail, setDoctorEmail] = useState("");
+  const [emailSending, setEmailSending] = useState(false);
+
+  const sendEmail = async () => {
+    if (!doctorEmail) return alert("Please enter an email");
+    setEmailSending(true);
+    try {
+      const data = await api("/api/ulcer/email-report", "POST", { recordId, targetEmail: doctorEmail }, sessionStorage.getItem("token"));
+      if (data.success) { alert("Email sent successfully!"); setShowEmailDialog(false); setDoctorEmail(""); }
+      else { alert(data.error || "Failed to send email"); }
+    } catch (e) { alert(e.message); }
+    setEmailSending(false);
+  };
 
   const sendChat = async () => {
     if (!chatInput.trim() || chatLoading) return;
@@ -824,6 +840,7 @@ function ResultScreen({ result, patientName, imageUrl, onBack, onDashboard }) {
             <span className={`risk-badge ${String(meta.risk).toLowerCase()}`}>Risk: {meta.risk}</span>
             <span className="urgency-badge">Urgency: {meta.urgency}</span>
             <button className="btn-small-primary" onClick={() => generateMedicalPDF({ patientName, result, imageUrl })}>📄 Download PDF Report</button>
+            {recordId && <button className="btn-small-primary" onClick={() => setShowEmailDialog(true)} style={{ marginLeft: "8px", background: "#4f46e5", border: "1px solid #4f46e5" }}>✉️ Email to Doctor</button>}
           </div>
           <div className="result-success">
             <span className="result-check">✅</span>
@@ -841,6 +858,20 @@ function ResultScreen({ result, patientName, imageUrl, onBack, onDashboard }) {
           <FormattedAIReport text={result} />
         </div>
 
+        {showEmailDialog && (
+          <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
+            <div style={{ background: "#fff", padding: "24px", borderRadius: "12px", width: "90%", maxWidth: "400px" }}>
+              <h3 style={{ marginTop: 0 }}>Email Report</h3>
+              <p>Send a secure copy of this clinical report directly to your doctor or dentist.</p>
+              <input type="email" placeholder="doctor@clinic.com" value={doctorEmail} onChange={e => setDoctorEmail(e.target.value)} style={{ width: "100%", padding: "12px", border: "1px solid #ccc", borderRadius: "8px", marginBottom: "16px", boxSizing: "border-box" }} />
+              <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+                <button onClick={() => setShowEmailDialog(false)} style={{ padding: "8px 16px", border: "none", background: "#eee", borderRadius: "8px", cursor: "pointer", fontWeight: "bold" }}>Cancel</button>
+                <button onClick={sendEmail} disabled={emailSending} style={{ padding: "8px 16px", border: "none", background: "#4f46e5", color: "#fff", borderRadius: "8px", cursor: "pointer", fontWeight: "bold" }}>{emailSending ? "Sending..." : "Send"}</button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="result-card">
           <div className="result-card-title">💬 Ask Follow-up Questions</div>
           <div className="chat-messages">
@@ -853,15 +884,15 @@ function ResultScreen({ result, patientName, imageUrl, onBack, onDashboard }) {
             ))}
           </div>
           <div className="chat-input-row">
-            <textarea 
-              value={chatInput} 
-              onChange={e => setChatInput(e.target.value)} 
+            <textarea
+              value={chatInput}
+              onChange={e => setChatInput(e.target.value)}
               onKeyDown={e => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   sendChat();
                 }
-              }} 
+              }}
               placeholder="Ask a question... (Shift+Enter for new line)"
               rows={2}
             />
@@ -1109,7 +1140,7 @@ HAS ATTACHED PHOTO: ${f.image ? "YES" : "No"}
   );
 
   if (screen === "view-record") return (
-    <ResultScreen result={viewRecord?.diagnosis} patientName={viewRecord?.patientName} imageUrl={viewRecord?.imageUrl} onBack={() => setScreen("history")} onDashboard={() => setScreen("dashboard")} />
+    <ResultScreen recordId={viewRecord?._id} result={viewRecord?.diagnosis} patientName={viewRecord?.patientName} imageUrl={viewRecord?.imageUrl} onBack={() => setScreen("history")} onDashboard={() => setScreen("dashboard")} />
   );
 
   if (screen === "result") return (
