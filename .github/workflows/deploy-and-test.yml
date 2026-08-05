@@ -50,6 +50,19 @@ jobs:
         working-directory: ./OUDSE2E
         run: npm test
 
+      - name: Run Web Security Scan (Frontend)
+        working-directory: ./OUDSE2E
+        run: node scripts/generateWebSecuritySuite.js
+
+      - name: Enforce Zero-Critical Security Gate (Frontend)
+        run: |
+          CRITICAL_COUNT=$(grep -o "Critical: [0-9]*" OUDSE2E/Test_Results/Security/web-executive-summary.md | awk '{print $2}')
+          echo "Found $CRITICAL_COUNT critical vulnerabilities in Frontend."
+          if [ "$CRITICAL_COUNT" -gt 0 ]; then
+            echo "Security Gate Failed: Critical vulnerabilities found!"
+            exit 1
+          fi
+
       - name: Merge HTML Report into Frontend Dist
         if: always()
         run: |
