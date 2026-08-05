@@ -17,21 +17,22 @@ for (let i = 0; i < 110; i++) {
 const BASE_URL = (process.env.TEST_BASE_URL || "http://127.0.0.1:5173").replace(/\/+$/, "");
 
 describe('MEGA Web E2E Test Suite (1,100 Assertions)', function() {
-  this.timeout(30000);
+  this.timeout(120000);
   let driver;
 
   before(async function() {
-    const options = new chrome.Options();
-    options.addArguments('--headless');
-    options.addArguments('--disable-gpu');
-    options.addArguments('--no-sandbox');
-    options.addArguments('--disable-dev-shm-usage');
-    
-    driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
     try {
+      const options = new chrome.Options();
+      options.addArguments('--headless');
+      options.addArguments('--disable-gpu');
+      options.addArguments('--no-sandbox');
+      options.addArguments('--disable-dev-shm-usage');
+      
+      driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
       await driver.get(BASE_URL);
     } catch (err) {
-      console.warn("Could not load base url initially, continuing anyway...", err.message);
+      console.error("FATAL ERROR IN BEFORE HOOK:", err);
+      throw err;
     }
   });
 

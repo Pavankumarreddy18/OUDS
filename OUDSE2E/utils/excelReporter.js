@@ -17,11 +17,13 @@ class ExcelReporter extends mocha.reporters.Base {
 
     runner.on(EVENT_TEST_PASS, (test) => {
       stats.passes++;
+      if (stats.passes % 100 === 0) console.log(`Progress: ${stats.passes} tests passed...`);
       this.recordTest(stats, test, 'Pass');
     });
 
     runner.on(EVENT_TEST_FAIL, (test, err) => {
       stats.failures++;
+      console.error(`[FAIL] ${test.title} - ${err.message}`);
       this.recordTest(stats, test, 'Fail', err.message);
     });
 
