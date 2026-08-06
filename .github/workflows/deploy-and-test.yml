@@ -52,6 +52,8 @@ jobs:
 
       - name: Run Web Security Scan (Frontend)
         working-directory: ./OUDSE2E
+        env:
+          NODE_PATH: ${{ github.workspace }}/OUDSE2E/node_modules
         run: node scripts/generateWebSecuritySuite.js
 
       - name: Enforce Zero-Critical Security Gate (Frontend)

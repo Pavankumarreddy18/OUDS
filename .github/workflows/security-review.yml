@@ -20,11 +20,13 @@ jobs:
           node-version: '20'
 
       - name: Install Security Suite Dependencies
-        working-directory: ./OUDSBackend
+        working-directory: ./OUDSE2E
         run: npm install
 
       - name: Run Backend Security Scan
         working-directory: ./OUDSBackend
+        env:
+          NODE_PATH: ${{ github.workspace }}/OUDSE2E/node_modules
         run: node scripts/generateSecuritySuite.js
 
       - name: Enforce Zero-Critical Security Gate
