@@ -1,6 +1,6 @@
 const categories = [
   'Functional', 'UI/UX', 'Compatibility', 'Performance', 'Security', 
-  'API', 'Database', 'Accessibility', 'Mobile-Specific', 'Regression', 'E2E'
+  'API', 'Database', 'Accessibility', 'Mobile-Specific', 'Regression', 'End-to-End'
 ];
 
 categories.forEach((category) => {

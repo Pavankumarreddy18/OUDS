@@ -72,11 +72,20 @@ jobs:
           OUDSAppium/Test_Results/HTML/
           OUDSAppium/Test_Results/Excel/
 
-    - name: Deploy to GitHub Pages
+    - name: Deploy Latest to GitHub Pages
       if: always()
       uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages
         folder: OUDSAppium/Test_Results/HTML
-        target-folder: reports/android-e2e
+        target-folder: reports/latest
+        clean: false
+
+    - name: Deploy Historical Build to GitHub Pages
+      if: always()
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: OUDSAppium/Test_Results/HTML
+        target-folder: reports/history/build-${{ github.run_number }}
         clean: false
