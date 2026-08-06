@@ -12,6 +12,7 @@
     "@wdio/mocha-framework": "^8.36.1",
     "appium-uiautomator2-driver": "^3.5.0",
     "exceljs": "^4.4.0",
-    "webdriverio": "^8.36.1"
+    "webdriverio": "^8.36.1",
+    "@wdio/spec-reporter": "^8.36.1"
   }
 }
