@@ -66,9 +66,8 @@ jobs:
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         disable-animations: true
         script: |
-          cd OUDSAppium
-          chmod +x scripts/ci_run_tests.sh
-          ./scripts/ci_run_tests.sh
+          chmod +x OUDSAppium/scripts/ci_run_tests.sh
+          cd OUDSAppium && ./scripts/ci_run_tests.sh
 
     - name: Ensure Test Result Directories Exist
       if: always()
