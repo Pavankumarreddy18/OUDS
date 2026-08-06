@@ -18,11 +18,12 @@ Format:
 
 Consider: Aphthous (Minor/Major/Herpetiform), Traumatic, Herpetic, Candidal, Lichen Planus, Leukoplakia, Erythroplakia, SCC, Behcet's, Nutritional Deficiency, Drug-induced. Use plain English. Complete ALL sections.`;
 
-const API_BASE = import.meta.env.VITE_API_URL || "https://auckland-crest-reservations-chair.trycloudflare.com";
+const API_BASE = import.meta.env.VITE_API_URL || "http://10.82.27.193:5000";
 
 const api = async (url, method = "GET", body = null, token = null) => {
   const headers = { 
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
+    "Bypass-Tunnel-Reminder": "true"
   };
   if (token) headers["Authorization"] = `Bearer ${token}`;
   const finalUrl = url.startsWith("http") ? url : `${API_BASE}${url}`;
@@ -288,6 +289,7 @@ function AuthScreen({ onLogin }) {
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && submit()}
+                  autoComplete="username"
                 />
               </div>
             </div>
@@ -303,6 +305,7 @@ function AuthScreen({ onLogin }) {
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && submit()}
+                    autoComplete={isRegister ? "new-password" : "current-password"}
                   />
                 </div>
               </div>
@@ -376,6 +379,7 @@ function AuthScreen({ onLogin }) {
                     value={newPassword}
                     onChange={e => setNewPassword(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && verifyOtp()}
+                    autoComplete="new-password"
                   />
                 </div>
               </div>
