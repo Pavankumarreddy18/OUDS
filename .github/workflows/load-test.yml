@@ -1,0 +1,36 @@
+name: API Load Testing (k6)
+
+on:
+  push:
+    paths:
+      - 'OUDSBackend/**'
+  pull_request:
+    paths:
+      - 'OUDSBackend/**'
+  workflow_dispatch:
+
+jobs:
+  k6-load-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Set up k6
+      uses: grafana/setup-k6-action@v1
+
+    - name: Run k6 Load Test
+      env:
+        BACKEND_URL: 'https://ouds-backend-bhumi.loca.lt' # Pointing to the persistent tunnel by default
+      run: |
+        k6 run --summary-export=summary.json OUDSBackend/scripts/load-test.js || true
+
+    - name: Parse and Publish Metrics
+      run: |
+        node OUDSBackend/scripts/parseK6Summary.js
