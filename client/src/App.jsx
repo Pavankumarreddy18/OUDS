@@ -738,7 +738,7 @@ function FormattedAIReport({ text }) {
     const trimmed = line.trim();
     if (!trimmed || trimmed === "---") return;
 
-    const headerMatch = trimmed.match(/^(\d+\.\s*)?(MOST LIKELY DIAGNOSIS|DIFFERENTIAL DIAGNOSES|RISK LEVEL|URGENCY|KEY FINDINGS|RED FLAGS|RECOMMENDED ACTION|RECOMMENDED ACTIONS|DISCLAIMER)[:\s*]*/i);
+    const headerMatch = trimmed.match(/^(\d+\.\s*)?(MOST LIKELY DIAGNOSIS|DIFFERENTIAL DIAGNOSES|ULCER CATEGORY|RISK LEVEL|URGENCY|KEY FINDINGS|RED FLAGS|RECOMMENDED ACTION|RECOMMENDED ACTIONS|DISCLAIMER)[:\s*]*/i);
 
     if (headerMatch && trimmed.length < 80) {
       if (currentBlock.content.length > 0 || currentBlock.title) {
@@ -766,6 +766,7 @@ function FormattedAIReport({ text }) {
 
         if (titleLower.includes("likely diagnosis")) { sectionClass = "report-section-primary"; icon = "🩺"; }
         else if (titleLower.includes("differential")) { sectionClass = "report-section-info"; icon = "🔍"; }
+        else if (titleLower.includes("category")) { sectionClass = "report-section-default"; icon = "🏷️"; }
         else if (titleLower.includes("red flag")) { sectionClass = "report-section-danger"; icon = "🚨"; }
         else if (titleLower.includes("recommend") || titleLower.includes("action")) { sectionClass = "report-section-success"; icon = "💡"; }
         else if (titleLower.includes("finding")) { sectionClass = "report-section-warning"; icon = "🔎"; }

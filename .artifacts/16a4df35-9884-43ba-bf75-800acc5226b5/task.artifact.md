@@ -1,0 +1,4 @@
+- [x] Build web assets (npm run build)
+- [x] Sync Capacitor (npx cap sync android)
+- [x] Build debug APK (gradlew assembleDebug)
+- [/] Install and Launch on device (Device disconnected)
