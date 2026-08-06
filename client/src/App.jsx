@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { GoogleLogin } from "@react-oauth/google";
+import { App as CapacitorApp } from "@capacitor/app";
 import { jsPDF } from "jspdf";
 import "./App.css";
 
@@ -1044,6 +1045,47 @@ export default function App() {
     localStorage.setItem("notifications", String(notifications));
     localStorage.setItem("language", language);
   }, [darkMode, fontSize, notifications, language]);
+
+  // Handle Android Hardware Back Button
+  useEffect(() => {
+    const handleBackButton = async () => {
+      if (!user || !token) {
+        CapacitorApp.exitApp();
+        return;
+      }
+      
+      if (screen === "dashboard") {
+        CapacitorApp.exitApp();
+        return;
+      }
+      
+      if (screen === "settings" || screen === "history") {
+        setScreen("dashboard");
+      } else if (screen === "view-record") {
+        setScreen("history");
+      } else if (screen === "result") {
+        setScreen("assessment");
+        setCurrentStep(STEPS.length);
+      } else if (screen === "assessment") {
+        if (currentStep > 1) {
+          setCurrentStep(s => s - 1);
+        } else {
+          setScreen("dashboard");
+        }
+      }
+    };
+
+    let backListener;
+    CapacitorApp.addListener('backButton', handleBackButton).then(listener => {
+      backListener = listener;
+    });
+
+    return () => {
+      if (backListener) {
+        backListener.remove();
+      }
+    };
+  }, [screen, currentStep, user, token]);
 
   const set = (key) => (val) => setForm(f => ({ ...f, [key]: val }));
 
