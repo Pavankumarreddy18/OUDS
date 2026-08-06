@@ -276,6 +276,7 @@ function AuthScreen({ onLogin }) {
 
       <div className="auth-card">
         {error && <div className="auth-error">{error}</div>}
+        <form onSubmit={(e) => { e.preventDefault(); !otpStep ? submit() : verifyOtp(); }}>
 
         {!otpStep ? (
           <>
@@ -319,7 +320,7 @@ function AuthScreen({ onLogin }) {
               </div>
             )}
 
-            <button className="auth-submit" onClick={submit} disabled={loading}>
+            <button type="submit" className="auth-submit" disabled={loading}>
               {loading ? "Please wait..." : isForgot ? "Send Reset Code" : isRegister ? "Send OTP" : "Sign In"}
             </button>
 
@@ -385,7 +386,7 @@ function AuthScreen({ onLogin }) {
               </div>
             )}
 
-            <button className="auth-submit" onClick={verifyOtp} disabled={loading}>
+            <button type="submit" className="auth-submit" disabled={loading}>
               {loading ? "Verifying..." : isForgot ? "Reset Password" : "Verify OTP"}
             </button>
 
@@ -404,6 +405,7 @@ function AuthScreen({ onLogin }) {
             </p>
           </>
         )}
+        </form>
       </div>
     </div>
   );
