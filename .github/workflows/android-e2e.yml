@@ -70,6 +70,12 @@ jobs:
           chmod +x scripts/ci_run_tests.sh
           ./scripts/ci_run_tests.sh
 
+    - name: Ensure Test Result Directories Exist
+      if: always()
+      run: |
+        mkdir -p OUDSAppium/Test_Results/HTML
+        mkdir -p OUDSAppium/Test_Results/Excel
+
     - name: Upload Test Artifacts
       if: always()
       uses: actions/upload-artifact@v4
