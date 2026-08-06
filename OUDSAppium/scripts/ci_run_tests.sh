@@ -1,10 +1,22 @@
 #!/bin/bash
-set -e
 
 # Export the github paths so we can find node in sub-shells
 if [ -f "$GITHUB_PATH" ]; then
   export PATH="$(cat $GITHUB_PATH | tr '\n' ':')$PATH"
 fi
+
+mkdir -p Test_Results/HTML
+mkdir -p Test_Results/Excel
+
+function cleanup {
+  if [ ! -f ".wdio-results.jsonl" ]; then
+    echo "Tests didn't finish properly. Creating fallback report."
+    node utils/generateFallbackReport.js || true
+  fi
+}
+trap cleanup EXIT
+
+set -e
 
 echo "Installing APK to emulator..."
 adb install -r "${APK_PATH}"
@@ -30,10 +42,7 @@ echo "Appium is running!"
 echo "Running WDIO Appium tests..."
 export WDIO_CI_SPEC="./tests/12_e2e/mega_android_1100.test.js"
 if ! node node_modules/@wdio/cli/bin/wdio.js run wdio.conf.js; then
-  echo "WDIO tests encountered failures. Creating fallback report if needed."
-  if [ ! -f ".wdio-results.jsonl" ]; then
-    node utils/generateFallbackReport.js
-  fi
+  echo "WDIO tests encountered failures."
   exit 1
 fi
 
